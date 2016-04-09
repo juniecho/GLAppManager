@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.row_applist, null);
                 holder = new ViewHolder(convertView);
-
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -173,21 +171,16 @@ public class MainActivity extends AppCompatActivity {
             holder.appPackageName.setText(item.getAppPackageName());
             holder.appVersion.setText(item.getAppVersion());
 
-            if (isPackageInstalled(item.getAppPackageName())) {
-                if (isPackageAvailableUpdate(item.getAppPackageName(), item.getAppPath())) {
-                    holder.button.setText(R.string.update);
-                } else {
-                    holder.button.setText(R.string.delete);
-                }
-            } else {
-                holder.button.setText(R.string.install);
-            }
+            final boolean isInstalled = isPackageInstalled(item.getAppPackageName());
+            final boolean isUpdate = isPackageAvailableUpdate(item.getAppPackageName(), item.getAppPath());
+
+            holder.button.setText((isInstalled) ? (isUpdate) ? R.string.update : R.string.delete: R.string.install);
 
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isPackageInstalled(item.getAppPackageName())) {
-                        if (isPackageAvailableUpdate(item.getAppPackageName(), item.getAppPath())) {
+                    if (isInstalled) {
+                        if (isUpdate) {
                             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
                             intent.setData(Uri.fromFile(new File(item.getAppPath())));
                             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
@@ -220,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
         private String appTitle;
         private String appPackageName;
         private String appVersion;
-        private boolean installed;
         private String appPath;
 
         public String getAppPath() {
