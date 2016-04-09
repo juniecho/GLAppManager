@@ -1,0 +1,6 @@
+<resources>
+		<string name="app_name">곰돌라이트 앱 매니저</string>
+		<string name="update">업데이트</string>
+		<string name="delete">제거</string>
+		<string name="install">설치</string>
+</resources>

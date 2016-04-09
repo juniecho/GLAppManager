@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         list = (ListView) findViewById(R.id.list);
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
 
-        toolbar.setTitle("곰돌라이트 앱 매니저");
+        toolbar.setTitle(R.string.app_name);
         toolbar.setTitleTextColor(0xffffffff);
 
         new LoadAPKList().execute();
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             dialog = new MaterialDialog.Builder(MainActivity.this)
-                    .content("로딩중입니다...")
+                    .content("Loading...")
                     .cancelable(false)
                     .progress(true, 0)
                     .show();
@@ -175,12 +175,12 @@ public class MainActivity extends AppCompatActivity {
 
             if (isPackageInstalled(item.getAppPackageName())) {
                 if (isPackageAvailableUpdate(item.getAppPackageName(), item.getAppPath())) {
-                    holder.button.setText("업데이트");
+                    holder.button.setText(R.string.update);
                 } else {
-                    holder.button.setText("제거");
+                    holder.button.setText(R.string.delete);
                 }
             } else {
-                holder.button.setText("설치");
+                holder.button.setText(R.string.install);
             }
 
             holder.button.setOnClickListener(new View.OnClickListener() {
