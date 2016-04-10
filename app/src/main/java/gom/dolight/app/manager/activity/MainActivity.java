@@ -28,10 +28,12 @@ import gom.dolight.app.manager.utils.ApplicationManager;
 import gom.dolight.app.manager.utils.NaraePreference;
 import gom.dolight.app.manager.utils.RebootDelegator;
 import gom.dolight.app.manager.utils.StatusBarColorUtils;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity implements Constants {
     Toolbar toolbar;
@@ -216,11 +218,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
             deleteList = new ArrayList<>();
 
             // 설정된 PATH로부터 파일들을 불러옵니다.
+            // https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FileUtils.html#listFiles(java.io.File, java.lang.String[], boolean) 를 사용하여
+            // 하위 폴더에 있는 .apk들을 전부 리스트화 시킵니다.
             File f = new File(PATH);
-            File file[] = f.listFiles();
+            Collection<File> fileList = FileUtils.listFiles(f, new String[]{"apk"}, true);
 
             // 반복문으로 apk 파일들의 절대 경로를 추가합니다.
-            for (File fe : file) {
+            for (File fe : fileList) {
+                // .apk가 절대 경로에 포함되어있을 경우에만 추가합니다.
                 if (fe.getAbsolutePath().contains(".apk"))
                     apkFileList.add(fe.getAbsolutePath());
             }
