@@ -26,9 +26,7 @@ import gom.dolight.app.manager.list.holder.CategoryViewHolder;
 import gom.dolight.app.manager.list.item.CategoryItem;
 import gom.dolight.app.manager.list.item.ListItem;
 import gom.dolight.app.manager.list.item.RecyclerItem;
-import gom.dolight.app.manager.utils.ApplicationManager;
-import gom.dolight.app.manager.utils.RebootDelegator;
-import gom.dolight.app.manager.utils.StatusBarColorUtils;
+import gom.dolight.app.manager.utils.*;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     AppViewAdapter adapter;
     ArrayList<RecyclerItem> itemSet;
-    LinearLayoutManager linearLayoutManager;
+    LinearLayoutManager layoutManager;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -69,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
         }
 
         list = (RecyclerView) findViewById(R.id.list);
-        linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-        list.setLayoutManager(linearLayoutManager);
+        layoutManager = new LinearLayoutManager(MainActivity.this);
+        list.setLayoutManager(layoutManager);
 
         new LoadAPKList().execute();
     }
