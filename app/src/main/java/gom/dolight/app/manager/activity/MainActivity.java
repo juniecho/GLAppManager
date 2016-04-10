@@ -24,7 +24,10 @@ import gom.dolight.app.manager.list.holder.CategoryViewHolder;
 import gom.dolight.app.manager.list.item.CategoryItem;
 import gom.dolight.app.manager.list.item.ListItem;
 import gom.dolight.app.manager.list.item.RecyclerItem;
-import gom.dolight.app.manager.utils.*;
+import gom.dolight.app.manager.utils.ApplicationManager;
+import gom.dolight.app.manager.utils.NaraePreference;
+import gom.dolight.app.manager.utils.RebootDelegator;
+import gom.dolight.app.manager.utils.StatusBarColorUtils;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.osl:
-                String url ="http://juniecho.github.io";
+                String url = "http://juniecho.github.io";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             default:
@@ -218,7 +221,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
             // 반복문으로 apk 파일들의 절대 경로를 추가합니다.
             for (File fe : file) {
-                apkFileList.add(fe.getAbsolutePath());
+                if (fe.getAbsolutePath().contains(".apk"))
+                    apkFileList.add(fe.getAbsolutePath());
             }
 
             for (String apkPath : apkFileList) {
