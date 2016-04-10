@@ -95,6 +95,21 @@ public class MainActivity extends AppCompatActivity implements Constants {
     } */
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        np.put(pauseBoot, true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (np.getValue(pauseBoot, false)) {
+            new LoadAPKList().execute();
+            np.put(pauseBoot, false);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_web, menu);
