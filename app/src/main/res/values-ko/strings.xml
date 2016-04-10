@@ -1,6 +1,10 @@
 <resources>
-		<string name="app_name">곰돌라이트 앱 매니저</string>
+		<string name="app_name">GomdoLight 앱 관리자</string>
 		<string name="update">업데이트</string>
 		<string name="delete">제거</string>
 		<string name="install">설치</string>
+		<string name="loading">로드 중...</string>
+		<string name="update_list">업데이트 사용 가능</string>
+		<string name="install_list">설치되지 않음</string>
+		<string name="delete_list">설치됨</string>
 </resources>
