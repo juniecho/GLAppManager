@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     AppViewAdapter adapter;
     ArrayList<RecyclerItem> itemSet;
     LinearLayoutManager layoutManager;
+    MaterialDialog installDialog;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
             // APK가 설치되었을 때 메소드를 호출합니다.
             am.setOnInstalledPackaged(new OnInstalledPackaged() {
                 public void packageInstalled(String packageName, int returnCode) {
+                    if (installDialog.isShowing())
+                        installDialog.dismiss();
                     if (returnCode == ApplicationManager.INSTALL_SUCCEEDED) {
                         RebootDelegator.reboot(MainActivity.this);
                     }
@@ -76,6 +79,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
         // APK 리스트 로드 프로세스 (백그라운드 작업) 실행
         new LoadAPKList().execute();
+
+        installDialog = new MaterialDialog.Builder(MainActivity.this)
+                .content(R.string.loading)
+                .cancelable(false)
+                .progress(true, 0)
+                .build();
     }
 
     public void toolbarSetting() {
@@ -141,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     // APK 로드 프로세스
     public class LoadAPKList extends AsyncTask<Void, Void, Void> {
         ArrayList<String> apkFileList = new ArrayList<>();
-        MaterialDialog dialog;
+        MaterialDialog loadingDialog;
 
         ArrayList<ListItem> updateList;
         ArrayList<ListItem> installList;
@@ -153,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             // 작업하기 전에 로딩중 다이얼로그 띄움
             // MaterialDialog란 오픈소스 라이브러리를 사용합니다.
             // https://github.com/afollestad/material-dialogs
-            dialog = new MaterialDialog.Builder(MainActivity.this)
+            loadingDialog = new MaterialDialog.Builder(MainActivity.this)
                     .content(R.string.loading)
                     .cancelable(false)
                     .progress(true, 0)
@@ -246,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
+            loadingDialog.dismiss();
             // AppViewAdpater 에 데이터들을 전달합니다.
             adapter = new AppViewAdapter(MainActivity.this, itemSet, pm, am);
             list.setAdapter(adapter);
@@ -329,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     if (isInstalled) {
                         if (isUpdate) {
                             try {
+                                installDialog.show();
                                 am.installPackage(item.getAppPath());
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
@@ -343,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
                         }
                     } else {
                         try {
+                            installDialog.show();
                             am.installPackage(item.getAppPath());
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
