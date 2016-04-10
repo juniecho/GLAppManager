@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         new LoadAPKList().execute();
 
         installDialog = new MaterialDialog.Builder(MainActivity.this)
-                .content(R.string.loading)
+                .content(R.string.installing)
                 .cancelable(false)
                 .progress(true, 0)
                 .build();
@@ -400,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             try {
                 PackageInfo installedInfo = pm.getPackageInfo(packageName, 0);
                 PackageInfo folderInfo = pm.getPackageArchiveInfo(appPath, 0);
-                return installedInfo.versionCode != folderInfo.versionCode;
+                return installedInfo.versionCode < folderInfo.versionCode;
             } catch (Exception e) {
                 return false;
             }

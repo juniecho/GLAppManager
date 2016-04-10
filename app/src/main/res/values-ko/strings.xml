@@ -4,6 +4,7 @@
 		<string name="delete">제거</string>
 		<string name="install">설치</string>
 		<string name="loading">로드 중...</string>
+		<string name="installing">설치 중...</string>
 		<string name="update_list">업데이트 사용 가능</string>
 		<string name="install_list">설치되지 않음</string>
 		<string name="delete_list">설치됨</string>

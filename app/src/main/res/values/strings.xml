@@ -4,6 +4,7 @@
 		<string name="delete">Remove</string>
 		<string name="install">Install</string>
 		<string name="loading">Loading...</string>
+		<string name="installing">Installing...</string>
 		<string name="update_list">Update Available</string>
 		<string name="install_list">Not Installed</string>
 		<string name="delete_list">Installed</string>

@@ -17,7 +17,7 @@ public class StatusBarColorUtils {
             w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             // 색상은 16진수로 설정합니다. 0xffRRGGBB
             w.setStatusBarColor(0xff009688);
-            w.setNavigationBarColor(0xff009668);
+            w.setNavigationBarColor(0xff009688);
         }
     }
 }
