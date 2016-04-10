@@ -1,4 +1,4 @@
-package gom.dolight.app.manager.list;
+package gom.dolight.app.manager.list.item;
 
 import android.graphics.drawable.Drawable;
 
