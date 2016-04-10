@@ -1,4 +1,4 @@
-package gom.dolight.app.manager;
+package gom.dolight.app.manager.utils;
 
 import android.os.Build;
 import android.view.Window;

@@ -1,10 +1,11 @@
-package gom.dolight.app.manager;
+package gom.dolight.app.manager.utils;
 
 import android.content.Context;
 import android.content.pm.IPackageInstallObserver;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.RemoteException;
+import gom.dolight.app.manager.interfaces.OnInstalledPackaged;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

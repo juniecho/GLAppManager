@@ -1,4 +1,4 @@
-package gom.dolight.app.manager;
+package gom.dolight.app.manager.interfaces;
 
 public interface OnInstalledPackaged {
 	
