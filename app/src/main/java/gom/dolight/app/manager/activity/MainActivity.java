@@ -14,9 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import com.afollestad.materialdialogs.MaterialDialog;
 import gom.dolight.app.manager.Constants;
 import gom.dolight.app.manager.R;
@@ -90,25 +88,30 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 .build();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        np.put(pauseBoot, true);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (np.getValue(pauseBoot, false)) {
-            RebootDelegator.reboot(MainActivity.this);
-        }
-    }
-
     /* 상술한 toolbar 관련
     public void toolbarSetting() {
         toolbar.setTitle(R.string.app_name);
         toolbar.setTitleTextColor(0xffffffff);
     } */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_web, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.osl:
+                String url ="http://juniecho.github.io";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     // 패키지가 설치되었는지 확인하는 메소드
     private boolean isPackageInstalled(String packageName) {
