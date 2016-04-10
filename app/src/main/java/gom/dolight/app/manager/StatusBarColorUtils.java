@@ -1,4 +1,4 @@
-package com.github.windsekirun.glappmanager;
+package gom.dolight.app.manager;
 
 import android.os.Build;
 import android.view.Window;

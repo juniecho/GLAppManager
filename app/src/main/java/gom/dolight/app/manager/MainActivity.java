@@ -1,4 +1,4 @@
-package com.github.windsekirun.glappmanager;
+package gom.dolight.app.manager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,21 +9,19 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.windsekirun.glappmanager.R;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    public String PATH = Environment.getExternalStorageDirectory() + "/apps/";
-    // public String PATH = "/system/apps/priv-app";
+public class MainActivity extends AppCompatActivity implements Constants {
     public ListAdapter adapter;
     public ArrayList<ListItem> itemSet;
     ListView list;

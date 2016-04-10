@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.github.windsekirun.glappmanager"
+        applicationId "gom.dolight.app.manager"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
