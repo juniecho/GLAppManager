@@ -1,10 +1,10 @@
 <resources>
 		<string name="app_name">GomdoLight App Manager</string>
 		<string name="update">Update</string>
-		<string name="delete">Delete</string>
+		<string name="delete">Remove</string>
 		<string name="install">Install</string>
 		<string name="loading">Loading...</string>
-		<string name="update_list">Update List</string>
-		<string name="install_list">Install List</string>
-		<string name="delete_list">Delete List</string>
+		<string name="update_list">Update Available</string>
+		<string name="install_list">Not Installed</string>
+		<string name="delete_list">Installed</string>
 </resources>

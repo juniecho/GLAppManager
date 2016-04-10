@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
         StatusBarColorUtils.setColor(getWindow());
 
         // 위 제목을 나타나는 위젯. 메뉴 등 넣을 수 있습니다.
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarSetting();
+        // 일단은 shadow가 적용되는 타이틀바로 대체, 후일 필요하면 toolbar 사용
+        // toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // toolbarSetting();
 
         pm = getPackageManager();
         try {
@@ -87,10 +88,11 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 .build();
     }
 
+    /* 상술한 toolbar 관련
     public void toolbarSetting() {
         toolbar.setTitle(R.string.app_name);
         toolbar.setTitleTextColor(0xffffffff);
-    }
+    } */
 
     // 패키지가 설치되었는지 확인하는 메소드
     private boolean isPackageInstalled(String packageName) {
