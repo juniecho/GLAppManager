@@ -18,6 +18,7 @@ import android.widget.*;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ListView list;
     android.support.v7.widget.Toolbar toolbar;
     PackageManager pm;
+    ApplicationManager am;
 
     int UNINSTALL_REQUEST_CODE = 72;
     int INSTALL_REQUEST_CODE = 78;
@@ -47,6 +49,22 @@ public class MainActivity extends AppCompatActivity {
 
         new LoadAPKList().execute();
         pm = getPackageManager();
+        try {
+            am = new ApplicationManager(MainActivity.this);
+
+            am.setOnInstalledPackaged(new OnInstalledPackaged() {
+
+                public void packageInstalled(String packageName, int returnCode) {
+                    if (returnCode == ApplicationManager.INSTALL_SUCCEEDED) {
+                        if (adapter != null)
+                            adapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -174,19 +192,21 @@ public class MainActivity extends AppCompatActivity {
             final boolean isInstalled = isPackageInstalled(item.getAppPackageName());
             final boolean isUpdate = isPackageAvailableUpdate(item.getAppPackageName(), item.getAppPath());
 
-            holder.button.setText((isInstalled) ? (isUpdate) ? R.string.update : R.string.delete: R.string.install);
+            holder.button.setText((isInstalled) ? (isUpdate) ? R.string.update : R.string.delete : R.string.install);
 
             holder.button.setOnClickListener(new View.OnClickListener() {
+                @SuppressWarnings("TryWithIdenticalCatches")
                 @Override
                 public void onClick(View v) {
                     if (isInstalled) {
                         if (isUpdate) {
-                            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-                            intent.setData(Uri.fromFile(new File(item.getAppPath())));
-                            intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-                            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivityForResult(intent, INSTALL_REQUEST_CODE);
+                            try {
+                                am.installPackage(item.getAppPath());
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
                             intent.setData(Uri.parse("package:" + item.getAppPackageName()));
@@ -195,12 +215,21 @@ public class MainActivity extends AppCompatActivity {
                             startActivityForResult(intent, UNINSTALL_REQUEST_CODE);
                         }
                     } else {
+                        try {
+                            am.installPackage(item.getAppPath());
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        /*
                         Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
                         intent.setData(Uri.fromFile(new File(item.getAppPath())));
                         intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
                         intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivityForResult(intent, INSTALL_REQUEST_CODE);
+                        */
                     }
                 }
             });
