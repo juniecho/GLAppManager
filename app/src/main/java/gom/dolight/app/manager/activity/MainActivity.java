@@ -47,14 +47,18 @@ public class MainActivity extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 네비게이션, 상태바 색상 칠하기
         StatusBarColorUtils.setColor(getWindow());
 
+        // 위 제목을 나타나는 위젯. 메뉴 등 넣을 수 있습니다.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarSetting();
 
         pm = getPackageManager();
         try {
+            // 숨겨진 installPackages 메소드를 찾기 위한 클래스
             am = new ApplicationManager(MainActivity.this);
+            // APK가 설치되었을 때 메소드를 호출합니다.
             am.setOnInstalledPackaged(new OnInstalledPackaged() {
                 public void packageInstalled(String packageName, int returnCode) {
                     if (returnCode == ApplicationManager.INSTALL_SUCCEEDED) {
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         layoutManager = new LinearLayoutManager(MainActivity.this);
         list.setLayoutManager(layoutManager);
 
+        // APK 리스트 로드 프로세스 (백그라운드 작업) 실행
         new LoadAPKList().execute();
     }
 
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         toolbar.setTitleTextColor(0xffffffff);
     }
 
+    // 패키지가 설치되었는지 확인하는 메소드
     private boolean isPackageInstalled(String packageName) {
         try {
             pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
@@ -87,16 +93,18 @@ public class MainActivity extends AppCompatActivity implements Constants {
         }
     }
 
+    // 패키지가 업데이트 가능한지 확인하는 메소드
     private boolean isPackageAvailableUpdate(String packageName, String appPath) {
         try {
             PackageInfo installedInfo = pm.getPackageInfo(packageName, 0);
             PackageInfo folderInfo = pm.getPackageArchiveInfo(appPath, 0);
-            return installedInfo.versionCode != folderInfo.versionCode;
+            return installedInfo.versionCode < folderInfo.versionCode;
         } catch (Exception e) {
             return false;
         }
     }
 
+    // 카테고리를 생성하는 메소드
     public RecyclerItem generateCategoryItem(String text) {
         RecyclerItem item = new RecyclerItem();
         CategoryItem categoryItem = new CategoryItem();
@@ -106,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         return item;
     }
 
+    // 앱 리스트를 생성하는 메소드
     public RecyclerItem generateListItem(ListItem listItem) {
         RecyclerItem item = new RecyclerItem();
         item.setViewType(0);
@@ -113,11 +122,13 @@ public class MainActivity extends AppCompatActivity implements Constants {
         return item;
     }
 
+    // 앱 삭제시 삭제 결과를 리턴하는 메소드
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 72) {
             if (resultCode == RESULT_OK) {
+                // 재부팅 메소드
                 RebootDelegator.reboot(MainActivity.this);
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d("TAG", "onActivityResult: user canceled the (un)install");
@@ -127,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         }
     }
 
+    // APK 로드 프로세스
     public class LoadAPKList extends AsyncTask<Void, Void, Void> {
         ArrayList<String> apkFileList = new ArrayList<>();
         MaterialDialog dialog;
@@ -138,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            // 작업하기 전에 로딩중 다이얼로그 띄움
+            // MaterialDialog란 오픈소스 라이브러리를 사용합니다.
+            // https://github.com/afollestad/material-dialogs
             dialog = new MaterialDialog.Builder(MainActivity.this)
                     .content(R.string.loading)
                     .cancelable(false)
@@ -147,52 +162,67 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
         @Override
         protected Void doInBackground(Void... params) {
+            // 리스트 비우기
             itemSet = new ArrayList<>();
             updateList = new ArrayList<>();
             installList = new ArrayList<>();
             deleteList = new ArrayList<>();
 
+            // 설정된 PATH로부터 파일들을 불러옵니다.
             File f = new File(PATH);
             File file[] = f.listFiles();
 
+            // 반복문으로 apk 파일들의 절대 경로를 추가합니다.
             for (File fe : file) {
                 apkFileList.add(fe.getAbsolutePath());
             }
 
             for (String apkPath : apkFileList) {
+                // 패키지 정보를 불러옵니다.
                 PackageInfo info = pm.getPackageArchiveInfo(apkPath, 0);
                 info.applicationInfo.sourceDir = apkPath;
                 info.applicationInfo.publicSourceDir = apkPath;
                 CharSequence name = pm.getApplicationLabel(info.applicationInfo);
 
                 ListItem item = new ListItem();
+                // apk 아이콘
                 item.setAppIcon(info.applicationInfo.loadIcon(pm));
+                // apk 패키지 이름
                 item.setAppPackageName(info.packageName);
+                // apk 이름
                 item.setAppTitle(name.toString());
+                // apk 버전 (버전 네임과 버전 코드를 혼합합니다)
                 item.setAppVersion(info.versionName + " (" + info.versionCode + ") ");
+                // apk 절대 경로
                 item.setAppPath(apkPath);
 
                 if (isPackageInstalled(info.packageName)) {
                     if (isPackageAvailableUpdate(info.packageName, apkPath)) {
+                        // 업데이트 가능할 시 업데이트 리스트로 넣습니다.
                         updateList.add(item);
                     } else {
+                        // 이미 설치된 것일 경우 삭제 리스트로 넣습니다.
                         deleteList.add(item);
                     }
                 } else {
+                    // 설치가 안된 경우 설치 리스트로 넣습니다.
                     installList.add(item);
                 }
             }
 
             if (updateList.size() != 0) {
+                // 업데이트 리스트가 비어있지 않은 경우 카테고리와 업데이트 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.update_list)));
                 for (ListItem item : updateList) {
                     itemSet.add(generateListItem(item));
                 }
+                // 메모리 순환
                 updateList.clear();
                 updateList.trimToSize();
             }
 
             if (installList.size() != 0) {
+                // 설치 리스트가 비어있지 않은 경우 카테고리와 설치 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.install_list)));
                 for (ListItem item : installList) {
                     itemSet.add(generateListItem(item));
@@ -202,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
 
             if (deleteList.size() != 0) {
+                // 삭제 리스트가 비어있지 않은 경우 카테고리와 삭제 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.delete_list)));
                 for (ListItem item : deleteList) {
                     itemSet.add(generateListItem(item));
@@ -216,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             dialog.dismiss();
-
+            // AppViewAdpater 에 데이터들을 전달합니다.
             adapter = new AppViewAdapter(MainActivity.this, itemSet, pm, am);
             list.setAdapter(adapter);
         }
@@ -229,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         PackageManager pm;
         ApplicationManager am;
 
+        // 생성 인자 전송
         public AppViewAdapter(Activity a, ArrayList<RecyclerItem> itemSet, PackageManager pm, ApplicationManager am) {
             c = a;
             dataSet = itemSet;
@@ -242,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v;
             RecyclerView.ViewHolder holder;
+            // viewType 에 따라 표시할 객체를 설정합니다.
             switch (viewType) {
                 default:
                 case 0:
@@ -268,20 +301,27 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
         }
 
+        // 앱 리스트
         public void getAppList(RecyclerView.ViewHolder hold, int position) {
             AppViewHolder holder = (AppViewHolder) hold;
             final ListItem item = dataSet.get(position).getListItem();
 
+            // 앱 아이콘 설정
             holder.appIcon.setImageDrawable(item.getAppIcon());
+            // 앱 이름 설정
             holder.appTitle.setText(item.getAppTitle());
+            // 앱 패키지 이름 설정
             holder.appPackageName.setText(item.getAppPackageName());
+            // 앱 버전 설정
             holder.appVersion.setText(item.getAppVersion());
 
             final boolean isInstalled = isPackageInstalled(item.getAppPackageName());
             final boolean isUpdate = isPackageAvailableUpdate(item.getAppPackageName(), item.getAppPath());
 
+            // 설치 / 제거 / 업데이트 문구 설정
             holder.button.setText((isInstalled) ? (isUpdate) ? R.string.update : R.string.delete : R.string.install);
 
+            // 상태에 따라 설치 / 제거 / 업데이트 진행
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @SuppressWarnings("TryWithIdenticalCatches")
                 @Override
@@ -314,17 +354,20 @@ public class MainActivity extends AppCompatActivity implements Constants {
             });
         }
 
+        // 카테고리 설정
         public void getCategoryList(RecyclerView.ViewHolder hold, int position) {
             CategoryViewHolder holder = (CategoryViewHolder) hold;
             CategoryItem item = dataSet.get(position).getCategoryItem();
             holder.categoryText.setText(item.getCategoryText());
         }
 
+        // 전체 리스트의 수 리턴
         @Override
         public int getItemCount() {
             return dataSet.size();
         }
 
+        // 해당 위치에 뭐가 들어가야되는지 리턴해주는 메소드
         @Override
         public int getItemViewType(int position) {
             RecyclerItem holder = dataSet.get(position);

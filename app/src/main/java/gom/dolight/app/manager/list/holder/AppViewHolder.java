@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import gom.dolight.app.manager.R;
 
+// 앱 리스트에서 표시할 위젯을 미리 설정합니다.
 public class AppViewHolder extends RecyclerView.ViewHolder {
     public ImageView appIcon;
     public TextView appTitle;

@@ -1,5 +1,7 @@
 package android.content.pm;
 
+// 이 클래스는 Android 내 PackageManager 속에 숨겨져 있는 클래스입니다.
+// 별도 설명은 하지 않습니다.
 public interface IPackageInstallObserver extends android.os.IInterface {
 	
 	public abstract static class Stub extends android.os.Binder implements android.content.pm.IPackageInstallObserver {

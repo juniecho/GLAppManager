@@ -11,9 +11,9 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+// 숨겨진 메소드를 찾기 위해 생성된 클래스입니다.
 public class ApplicationManager {
 
-	public final int INSTALL_REPLACE_EXISTING = 2;
     public static final int INSTALL_SUCCEEDED = 1;
     public static final int INSTALL_FAILED_ALREADY_EXISTS = -1;
     public static final int INSTALL_FAILED_INVALID_APK = -2;
@@ -46,48 +46,56 @@ public class ApplicationManager {
     public static final int INSTALL_PARSE_FAILED_MANIFEST_MALFORMED = -108;
     public static final int INSTALL_PARSE_FAILED_MANIFEST_EMPTY = -109;
     public static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
+    // 각종 return code들
+    public final int INSTALL_REPLACE_EXISTING = 2;
+    private PackageInstallObserver observer;
+    private PackageManager pm;
+    private Method method;
 
-	private PackageInstallObserver observer;
-	private PackageManager pm;
-	private Method method;
-	
-	private OnInstalledPackaged onInstalledPackaged;
-	
-    class PackageInstallObserver extends IPackageInstallObserver.Stub {
+    private OnInstalledPackaged onInstalledPackaged;
 
-		public void packageInstalled(String packageName, int returnCode) throws RemoteException {
-			if (onInstalledPackaged != null) {
-				onInstalledPackaged.packageInstalled(packageName, returnCode);
-			}
-		}
-	}
-	
-	public ApplicationManager(Context context) throws SecurityException, NoSuchMethodException {
-		
+    public ApplicationManager(Context context) throws SecurityException, NoSuchMethodException {
         observer = new PackageInstallObserver();
         pm = context.getPackageManager();
-        
-        Class<?>[] types = new Class[] {Uri.class, IPackageInstallObserver.class, int.class, String.class};
-		method = pm.getClass().getMethod("installPackage", types);
-	}
-	
-	public void setOnInstalledPackaged(OnInstalledPackaged onInstalledPackaged) {
-		this.onInstalledPackaged = onInstalledPackaged;
-	}
 
-	public void installPackage(String apkFile) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		installPackage(new File(apkFile));
-	}
-	
-	public void installPackage(File apkFile) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		if (!apkFile.exists()) throw new IllegalArgumentException();
-		Uri packageURI = Uri.fromFile(apkFile);
-		installPackage(packageURI);
-	}
-	
-	@SuppressWarnings("RedundantArrayCreation")
+        // 파라미터 설정
+        Class<?>[] types = new Class[]{Uri.class, IPackageInstallObserver.class, int.class, String.class};
+        // installPackage 이름 붙은거와 위 types 라는 파라미터를 담은 메소드를 찾음
+        method = pm.getClass().getMethod("installPackage", types);
+    }
+
+    public void setOnInstalledPackaged(OnInstalledPackaged onInstalledPackaged) {
+        // 인터페이스 설정
+        this.onInstalledPackaged = onInstalledPackaged;
+    }
+
+    public void installPackage(String apkFile) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        // apk 경로로 패키지 설치
+        installPackage(new File(apkFile));
+    }
+
+    public void installPackage(File apkFile) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        // 파일이 존재하지 않을 경우 IllegalArgumentException 투척
+        if (!apkFile.exists()) throw new IllegalArgumentException();
+        Uri packageURI = Uri.fromFile(apkFile);
+        // URL로 패키지 설치
+        installPackage(packageURI);
+    }
+
+    @SuppressWarnings("RedundantArrayCreation")
     public void installPackage(Uri apkFile) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		method.invoke(pm, new Object[] {apkFile, observer, INSTALL_REPLACE_EXISTING, null});
-	}
-	
+        // 메소드 실행!
+        method.invoke(pm, new Object[]{apkFile, observer, INSTALL_REPLACE_EXISTING, null});
+    }
+
+    class PackageInstallObserver extends IPackageInstallObserver.Stub {
+
+        // observer에서 설치되었다고 알려주면 OnInstallPackaged 전송
+        public void packageInstalled(String packageName, int returnCode) throws RemoteException {
+            if (onInstalledPackaged != null) {
+                onInstalledPackaged.packageInstalled(packageName, returnCode);
+            }
+        }
+    }
+
 }

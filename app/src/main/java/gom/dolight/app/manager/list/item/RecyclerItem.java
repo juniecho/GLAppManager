@@ -5,6 +5,7 @@ package gom.dolight.app.manager.list.item;
  * Class: RecyclerItem
  * Created by WindSekirun on 16. 4. 10..
  */
+// 리스트에 복합 객체를 표시하기 위해 viewType를 담은 객체입니다
 public class RecyclerItem {
     private int viewType;
     private ListItem listItem;

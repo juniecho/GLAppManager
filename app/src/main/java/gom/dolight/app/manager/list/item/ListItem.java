@@ -2,6 +2,7 @@ package gom.dolight.app.manager.list.item;
 
 import android.graphics.drawable.Drawable;
 
+// 앱 리스트를 표시하기 위해 사용할 변수들을 담습니다.
 public class ListItem {
     private Drawable appIcon;
     private String appTitle;
