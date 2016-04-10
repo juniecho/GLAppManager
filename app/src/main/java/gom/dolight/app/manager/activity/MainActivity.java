@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     ArrayList<RecyclerItem> itemSet;
     LinearLayoutManager layoutManager;
     MaterialDialog installDialog;
+    NaraePreference np;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         // toolbar = (Toolbar) findViewById(R.id.toolbar);
         // toolbarSetting();
 
+        np = NaraePreference.getInstance(this);
         pm = getPackageManager();
         try {
             // 숨겨진 installPackages 메소드를 찾기 위한 클래스
@@ -86,6 +88,20 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 .cancelable(false)
                 .progress(true, 0)
                 .build();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        np.put(pauseBoot, true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (np.getValue(pauseBoot, false)) {
+            RebootDelegator.reboot(MainActivity.this);
+        }
     }
 
     /* 상술한 toolbar 관련
