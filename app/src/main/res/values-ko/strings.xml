@@ -1,11 +1,15 @@
 <resources>
-		<string name="app_name">GomdoLight 앱 관리자</string>
-		<string name="update">업데이트</string>
-		<string name="delete">제거</string>
-		<string name="install">설치</string>
-		<string name="loading">로드 중...</string>
-		<string name="installing">설치 중...</string>
-		<string name="update_list">업데이트 사용 가능</string>
-		<string name="install_list">설치되지 않음</string>
-		<string name="delete_list">설치됨</string>
+	<string name="app_name">GomdoLight 앱 관리자</string>
+	<string name="update">업데이트</string>
+	<string name="delete">제거</string>
+	<string name="install">설치</string>
+	<string name="loading">로드 중...</string>
+	<string name="installing">설치 중...</string>
+	<string name="update_list">업데이트 사용 가능</string>
+	<string name="install_list">설치되지 않음</string>
+	<string name="delete_list">설치됨</string>
+	<string name="menu_opensource">라이선스 정보</string>
+	<string name="menu_glhelp">온라인 사용자 설명서</string>
+	<string name="menu_glhelp_addr">http://manual.ko.gomdolight.com</string>
+	<string name="menu_glweb">GomdoLight 웹 사이트</string>
 </resources>

@@ -123,10 +123,24 @@ public class MainActivity extends AppCompatActivity implements Constants {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.osl:
+            case R.id.osl: {
                 String url = "http://juniecho.github.io";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
+                return super.onOptionsItemSelected(item);
+            }
+            case R.id.glhelp: {
+                String url = getString(R.string.menu_glhelp_addr);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                return super.onOptionsItemSelected(item);
+            }
+            case R.id.glweb: {
+                String url = "http://gomdolight.com";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                return super.onOptionsItemSelected(item);
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }

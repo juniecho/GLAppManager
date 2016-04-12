@@ -2,8 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 				xmlns:app="http://schemas.android.com/apk/res-auto">
 
-		<item
-						android:id="@+id/osl"
-				android:title="Open Source License"
-				app:showAsAction="withText"/>
+	<item
+		android:id="@+id/osl"
+		android:title="@string/menu_opensource"
+		app:showAsAction="withText"/>
+	<item
+		android:id="@+id/glhelp"
+		android:title="@string/menu_glhelp"
+		app:showAsAction="withText"/>
+	<item
+		android:id="@+id/glweb"
+		android:title="@string/menu_glweb"
+		app:showAsAction="withText"/>
 </menu>
