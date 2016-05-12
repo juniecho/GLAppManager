@@ -70,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     if (installDialog.isShowing())
                         installDialog.dismiss();
                     if (returnCode == ApplicationManager.INSTALL_SUCCEEDED) {
-                        RebootDelegator.reboot(MainActivity.this);
+                        //RebootDelegator.reboot(MainActivity.this);
+                        // 재부팅 대신 refresh만 합니다.
+                        new LoadAPKList().execute();
                     }
                 }
             });
@@ -252,8 +254,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 CharSequence name = pm.getApplicationLabel(info.applicationInfo);
 
                 ListItem item = new ListItem();
-                // apk 아이콘
                 item.setAppIcon(info.applicationInfo.loadIcon(pm));
+
                 // apk 패키지 이름
                 item.setAppPackageName(info.packageName);
                 // apk 이름
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 // 설치 리스트가 비어있지 않은 경우 카테고리와 설치 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.install_list)));
                 for (ListItem item : installList) {
-                    itemSet.add(generateListItem(item));
+
                 }
                 installList.clear();
                 installList.trimToSize();
@@ -461,5 +463,31 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 return false;
             }
         }
+    }
+
+    public static void trimCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            if (dir != null && dir.isDirectory()) {
+                deleteDir(dir);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir.delete();
     }
 }
