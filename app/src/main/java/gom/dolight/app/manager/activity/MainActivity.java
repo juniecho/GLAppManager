@@ -14,8 +14,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+
 import gom.dolight.app.manager.Constants;
 import gom.dolight.app.manager.R;
 import gom.dolight.app.manager.interfaces.OnInstalledPackaged;
@@ -28,12 +45,6 @@ import gom.dolight.app.manager.utils.ApplicationManager;
 import gom.dolight.app.manager.utils.NaraePreference;
 import gom.dolight.app.manager.utils.RebootDelegator;
 import gom.dolight.app.manager.utils.StatusBarColorUtils;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity implements Constants {
     Toolbar toolbar;
@@ -280,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
 
             if (updateList.size() != 0) {
+                // A to Z 소트
+                Collections.sort(updateList, sortComparor);
                 // 업데이트 리스트가 비어있지 않은 경우 카테고리와 업데이트 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.update_list)));
                 for (ListItem item : updateList) {
@@ -291,6 +304,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
 
             if (installList.size() != 0) {
+                // A to Z 소트
+                Collections.sort(installList, sortComparor);
                 // 설치 리스트가 비어있지 않은 경우 카테고리와 설치 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.install_list)));
                 for (ListItem item : installList) {
@@ -301,6 +316,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
 
             if (deleteList.size() != 0) {
+                // A to Z 소트
+                Collections.sort(deleteList, sortComparor);
                 // 삭제 리스트가 비어있지 않은 경우 카테고리와 삭제 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.delete_list)));
                 for (ListItem item : deleteList) {
@@ -465,29 +482,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
         }
     }
 
-    public static void trimCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            if (dir != null && dir.isDirectory()) {
-                deleteDir(dir);
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
+    // 현재 리스트에서 받는건 순정 객체가 아닌 커스텀 객체이므로, 비교기를 정의한다.
+    public Comparator<ListItem> sortComparor = new Comparator<ListItem>() {
+        Collator collator = Collator.getInstance();
 
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
+        @Override
+        public int compare(ListItem lhs, ListItem rhs) {
+            // 안드로이드 API 내 비교기를 인스턴스로 받아와 비교시킨다
+            return collator.compare(lhs.getAppTitle(), rhs.getAppTitle());
         }
-
-        // The directory is now empty so delete it
-        return dir.delete();
-    }
+    };
 }
