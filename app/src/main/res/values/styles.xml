@@ -12,7 +12,6 @@
 
     <style name="AppTheme_OverflowTheme" parent="android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_menu</item>
-        <item name="src">@drawable/ic_action_menu</item>
     </style>
 
 </resources>

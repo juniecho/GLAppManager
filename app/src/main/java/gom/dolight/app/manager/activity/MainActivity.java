@@ -81,9 +81,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     if (installDialog.isShowing())
                         installDialog.dismiss();
                     if (returnCode == ApplicationManager.INSTALL_SUCCEEDED) {
-                        //RebootDelegator.reboot(MainActivity.this);
-                        // 재부팅 대신 refresh만 합니다.
-                        new LoadAPKList().execute();
+                        RebootDelegator.reboot(MainActivity.this);
+                        // new LoadAPKList().execute();
                     }
                 }
             });

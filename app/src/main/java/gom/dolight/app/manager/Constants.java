@@ -15,6 +15,6 @@ public interface Constants {
     // Environment.getExternalStorageDirectory() 는 SD카드 경로, 즉 /storage/0/emulate 를 리턴합니다. (폰마다 다름)
     // 시스템 경로로 할 계획이시면 systemPATH 처럼 절대 경로로 설정해주세요.
     // String PATH = Environment.getExternalStorageDirectory() + "/apps/";
-    String PATH = "/system/apps/";
+    String PATH = "/system/gomdolpackages/";
     String systemPATH = "/system/apps/";
 }
