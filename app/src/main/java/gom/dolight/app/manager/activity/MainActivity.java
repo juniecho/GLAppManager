@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 // 설치 리스트가 비어있지 않은 경우 카테고리와 설치 리스트애서 앱 리스트를 생성합니다.
                 itemSet.add(generateCategoryItem(getString(R.string.install_list)));
                 for (ListItem item : installList) {
-
+                    itemSet.add(generateListItem(item));
                 }
                 installList.clear();
                 installList.trimToSize();
