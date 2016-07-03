@@ -40,7 +40,7 @@ Some GomdoLight Products can gather information (log data) on the internal opera
 
 ###5\. Disclaimer of Warranty
 
-Unless required by applicable law or agreed to in writing, any GomdoLight Product is provided on an "as is" basis, without warranties or conditions of any kind, either express or implied, including, without limitation, any warranties or conditions of non-infringement, or fitness for a particlar purpose. You are solely responsible for determining the appropriateness of using GomdoLight Products and assume any risks associated with your exercise of permissions under this License.
+Unless required by applicable law or agreed to in writing, any GomdoLight Product is provided on an "as is" basis, without warranties or conditions of any kind, either express or implied, including, without limitation, any warranties or conditions of non-infringement, or fitness for a particular purpose. You are solely responsible for determining the appropriateness of using GomdoLight Products and assume any risks associated with your exercise of permissions under this License.
 
 ###6\. Limitation of Liability
 
