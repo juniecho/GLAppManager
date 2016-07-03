@@ -3,7 +3,7 @@
 
 ###1\. Purpose
 
-The purpose of this document is to set forth the terms and conditions under which you are permitted to use, modify/reproduce, and redistribute GomdoLight Products.
+The purpose of this document is to set forth the terms and conditions under which you are permitted to use, modify/reproduce, and distribute GomdoLight Products or Derivative Works.
 
 ###2\. Definitions
 
