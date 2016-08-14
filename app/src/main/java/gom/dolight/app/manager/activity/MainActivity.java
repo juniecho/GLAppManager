@@ -153,6 +153,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 startActivity(intent);
                 return super.onOptionsItemSelected(item);
             }
+            case R.id.glrecapps: {
+                String url = "http://m.cafe.naver.com/ArticleList.nhn?search.clubid=28703928&search.menuid=1";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                return super.onOptionsItemSelected(item);
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }

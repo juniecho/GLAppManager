@@ -3,8 +3,8 @@
 	<string name="update">Update</string>
 	<string name="delete">Remove</string>
 	<string name="install">Install</string>
-	<string name="loading">Loading...</string>
-	<string name="installing">Installing...</string>
+	<string name="loading">Loading…</string>
+	<string name="installing">Installing…</string>
 	<string name="update_list">Update Available</string>
 	<string name="install_list">Not Installed</string>
 	<string name="delete_list">Installed</string>
@@ -12,4 +12,5 @@
 	<string name="menu_glhelp">Online Manual</string>
 	<string name="menu_glhelp_addr">http://manual.en.gomdolight.com</string>
 	<string name="menu_glweb">GomdoLight Website</string>
+	<string name="menu_glrecapps">App Picks</string>
 </resources>

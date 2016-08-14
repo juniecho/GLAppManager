@@ -14,4 +14,8 @@
 		android:id="@+id/glweb"
 		android:title="@string/menu_glweb"
 		app:showAsAction="withText"/>
+	<item
+		android:id="@+id/glrecapps"
+		android:title="@string/menu_glrecapps"
+		app:showAsAction="withText"/>
 </menu>
